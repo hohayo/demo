@@ -30,7 +30,7 @@
     @foreach($posts as $post)
         <div class="sm:grid grid-cols-2 gap-20 w-4/5 mx-auto py-15 border-b">
             <div>
-                <img src="{{ $post->image_path }}" alt="" width="700">
+                <img src="{{ asset('images/' . $post->image_path) }}" alt="">
             </div>
             <div>
                 <h2 class="text-gray-700 font-bold text-5xl pb-4">
@@ -47,6 +47,25 @@
                 <a href="/blog/{{ $post->slug }}" class="uppercase bg-blue-500 text-gray-100 text-lg font-extrabold py-4 px-8 rounded-3xl">
                     Keep Reading
                 </a>
+
+                @if (isset(Auth::user()->id) && Auth::user()->id == $post->user_id)
+                <span class="float-right">
+                    <a href="/blog/{{ $post->slug }}/edit" class="text-gray-700 italic hover:text-gray-900 pb-1 border-b-2">
+                        Edit
+                    </a>
+                </span>
+
+                <span class="float-right">
+                    <form
+                        action="/blog/{{ $post->slug }}"
+                        method="POST">
+                        @csrf
+                        @method('DELETE')
+
+                        <button class="text-red-500 pr-3 type="submit">Delete</button>
+                    </form>
+                </span>
+                @endif
             </div>
         </div>
     @endforeach
